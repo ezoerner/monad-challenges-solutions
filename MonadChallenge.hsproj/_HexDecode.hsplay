@@ -1,0 +1,4 @@
+-- Haskell Playground 1.0
+
+hexDecode "9d475eb78d3e38085220ed6ebde9d8f7d26540bb1c8f9382479c3acd4c8c94a3"
+

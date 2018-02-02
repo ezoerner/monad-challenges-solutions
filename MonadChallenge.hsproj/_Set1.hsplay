@@ -1,0 +1,7 @@
+-- Haskell Playground 1.0
+fiveRands
+
+product fiveRands == 8681089573064486461641871805074254223660
+
+randLetter $ mkSeed 4
+randString3
