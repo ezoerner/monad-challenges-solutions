@@ -5,3 +5,8 @@ product fiveRands == 8681089573064486461641871805074254223660
 
 randLetter $ mkSeed 4
 randString3
+
+rand $ mkSeed 1
+randEven $ mkSeed 1
+randOdd $ mkSeed 1
+randTen $ mkSeed 1
