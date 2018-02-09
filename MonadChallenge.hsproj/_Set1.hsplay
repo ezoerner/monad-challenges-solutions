@@ -12,3 +12,7 @@ c = fst $ randOdd $ mkSeed 1
 d = fst $ randTen $ mkSeed 1
 
 product [b, c, d] == 189908109902700
+
+fst (randPair $ mkSeed 1) == ('l',282475249)
+fst (generalPair randLetter rand $ mkSeed 1) == ('l',282475249)
+fst (generalPair2 randLetter rand $ mkSeed 1) == ('l',282475249)

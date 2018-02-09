@@ -35,3 +35,24 @@ generalA a2b genA seed = case genA seed of
   (a, sd) -> (a2b a, sd)
 
 -- 4. Generalizing Random Pairs
+randPair :: Gen (Char, Integer)
+randPair seed = ((ch, int), newSeed)
+  where
+    (ch, chSeed) = randLetter seed
+    (int, newSeed) = rand chSeed
+    
+generalPair :: Gen a -> Gen b -> Gen (a,b)
+generalPair genA genB seed = ((a, b), newSeed)
+  where
+    (a, aSeed) = genA seed
+    (b, newSeed) = genB aSeed
+    
+generalB :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
+generalB ab2c genA genB seed = (c, newSeed)
+  where
+    (a, aSeed) = genA seed
+    (b, bSeed) = genB aSeed
+    (c, newSeed) = ((ab2c a b), bSeed)
+    
+generalPair2:: Gen a -> Gen b -> Gen (a,b)
+generalPair2 genA genB = generalB (\a b -> (a, b)) genA genB
