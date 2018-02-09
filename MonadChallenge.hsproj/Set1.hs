@@ -22,19 +22,16 @@ randString3 = take 3 $ drop 1 $ map fst  $
 
 -- 3. More Generators
 randEven :: Gen Integer -- the output of rand * 2
-randEven = generalA id (* 2)
+randEven = generalA (* 2) rand
 
 randOdd :: Gen Integer -- the output of rand * 2 + 1
-randOdd = generalA id $ (+ 1) . (* 2)
+randOdd = generalA ((+ 1) . (* 2)) rand
 
 randTen :: Gen Integer -- the output of rand * 10
-randTen = generalA id (* 10)
-
-generalA :: (a -> a) -> (Integer -> a) -> Gen a
-generalA f fromInt seed = case rand seed of
-  (n, sd) -> (f $ fromInt n, sd)
+randTen = generalA (* 10) rand
   
-generalA' :: (a -> b) -> Gen a -> Gen b
-generalA' a2b genA seed = undefined -- ??
+generalA :: (a -> b) -> Gen a -> Gen b
+generalA a2b genA seed = case genA seed of
+  (a, sd) -> (a2b a, sd)
 
 -- 4. Generalizing Random Pairs
