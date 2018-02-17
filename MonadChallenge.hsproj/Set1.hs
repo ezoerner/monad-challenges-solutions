@@ -66,3 +66,10 @@ repRandom genAs seed0 = case foldl f ([], seed0) genAs of
     f (as, seed) genA  = case genA seed of
       (a, sd) -> (a : as, sd)
    
+-- 6. Threading the random number state
+genTwo :: Gen a -> (a -> Gen b) -> Gen b
+genTwo genA k seed = case genA seed of
+  (a, sd) -> k a sd
+  
+mkGen :: a -> Gen a
+mkGen a = \seed -> (a, seed)
