@@ -55,4 +55,14 @@ generalB ab2c genA genB seed = (c, newSeed)
     (c, newSeed) = ((ab2c a b), bSeed)
     
 generalPair2:: Gen a -> Gen b -> Gen (a,b)
-generalPair2 genA genB = generalB (\a b -> (a, b)) genA genB
+generalPair2 = generalB (,)
+
+-- 5. Generalizing Lists of Generators
+repRandom :: [Gen a] -> Gen [a]
+--repRandom :: [Seed -> (a, Seed)] -> (Seed -> ([a], Seed))
+repRandom genAs seed0 = case foldl f ([], seed0) genAs of
+    (as, resultSeed) -> (reverse as, resultSeed)
+  where
+    f (as, seed) genA  = case genA seed of
+      (a, sd) -> (a : as, sd)
+   
