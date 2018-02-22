@@ -1,9 +1,9 @@
 {-# LANGUAGE MonadComprehensions #-}
---{-# LANGUAGE RebindableSyntax  #-}
+{-# LANGUAGE RebindableSyntax  #-}
 
 module Set1 where
   
-import MCPrelude  (Seed, rand, mkSeed, toLetter)
+import MCPrelude --(Seed, rand, mkSeed, toLetter)
 
 -- 1. Random Number Generation
 fiveRands :: [Integer]
@@ -13,7 +13,7 @@ type Gen a = Seed -> (a, Seed)
 
 -- 2 Random Character Generation
 randLetter :: Gen Char
-randLetter seed = case rand seed of
+randLetter = \seed -> case rand seed of
   (n , seed) -> (toLetter n, seed)
 
 randString3 :: String
@@ -31,28 +31,34 @@ randTen :: Gen Integer -- the output of rand * 10
 randTen = generalA (* 10) rand
   
 generalA :: (a -> b) -> Gen a -> Gen b
-generalA a2b genA seed = case genA seed of
+generalA a2b genA = \seed -> case genA seed of
   (a, sd) -> (a2b a, sd)
 
 -- 4. Generalizing Random Pairs
 randPair :: Gen (Char, Integer)
-randPair seed = ((ch, int), newSeed)
-  where
-    (ch, chSeed) = randLetter seed
+randPair = \seed ->
+  let
+    (ch, chSeed) = (randLetter seed)
     (int, newSeed) = rand chSeed
+  in
+    ((ch, int), newSeed)
     
 generalPair :: Gen a -> Gen b -> Gen (a,b)
-generalPair genA genB seed = ((a, b), newSeed)
-  where
+generalPair genA genB = \seed ->
+  let
     (a, aSeed) = genA seed
     (b, newSeed) = genB aSeed
+  in
+    ((a, b), newSeed)
     
 generalB :: (a -> b -> c) -> Gen a -> Gen b -> Gen c
-generalB ab2c genA genB seed = (c, newSeed)
-  where
+generalB ab2c genA genB = \seed ->
+  let
     (a, aSeed) = genA seed
     (b, bSeed) = genB aSeed
     (c, newSeed) = ((ab2c a b), bSeed)
+  in
+    (c, newSeed)
     
 generalPair2:: Gen a -> Gen b -> Gen (a,b)
 generalPair2 = generalB (,)
@@ -60,15 +66,17 @@ generalPair2 = generalB (,)
 -- 5. Generalizing Lists of Generators
 repRandom :: [Gen a] -> Gen [a]
 --repRandom :: [Seed -> (a, Seed)] -> (Seed -> ([a], Seed))
-repRandom genAs seed0 = case foldl f ([], seed0) genAs of
-    (as, resultSeed) -> (reverse as, resultSeed)
-  where
+repRandom genAs = \seed0 ->
+  let
     f (as, seed) genA  = case genA seed of
       (a, sd) -> (a : as, sd)
-   
+  in
+    case foldl f ([], seed0) genAs of
+      (as, resultSeed) -> (reverse as, resultSeed)
+       
 -- 6. Threading the random number state
 genTwo :: Gen a -> (a -> Gen b) -> Gen b
-genTwo genA k seed = case genA seed of
+genTwo genA k = \seed -> case genA seed of
   (a, sd) -> k a sd
   
 mkGen :: a -> Gen a
