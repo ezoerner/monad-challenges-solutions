@@ -15,4 +15,5 @@ Executable MonadChallenge
   default-language: Haskell2010
   other-modules:
       MCPrelude
+      Set2
       HexDecode

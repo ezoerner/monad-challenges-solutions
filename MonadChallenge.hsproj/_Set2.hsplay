@@ -1,0 +1,50 @@
+-- Haskell Playground 1.0
+Just 5
+Nothing
+
+headMay []
+headMay [1, 2]
+headMay [1]
+
+tailMay []
+tailMay [1,2]
+tailMay [1]
+
+lookupMay 42 []
+lookupMay 42 [(42, 1)]
+lookupMay 42 [(1, 2)]
+lookupMay 42 [(1, 2), (42, 3)]
+
+divMay 4 2
+divMay 108 12
+divMay 2 4
+divMay 42 0
+
+maximumMay []
+maximumMay [1]
+maximumMay [42, 3]
+maximumMay [3, 108, 12]
+maximumMay [3, 108, 12, 108]
+
+minimumMay []
+minimumMay [1]
+minimumMay [42, 3]
+minimumMay [108, 3, 12]
+minimumMay [108, 3, 12, 3]
+
+greekDataA
+greekDataB
+
+queryGreek greekDataA "beta"
+
+queryGreek greekDataA "alpha" == Just 2.0
+queryGreek greekDataA "beta" == Nothing
+queryGreek greekDataA "gamma" == Just 3.3333333333333335
+queryGreek greekDataA "delta" == Nothing
+queryGreek greekDataA "zeta" == Nothing
+
+queryGreek greekDataB "rho" == Nothing
+queryGreek greekDataB "phi" == Just 0.24528301886792453
+queryGreek greekDataB "chi" == Just 9.095238095238095
+queryGreek greekDataB "psi" == Nothing
+queryGreek greekDataB "omega" == Just 24.0
