@@ -69,3 +69,24 @@ queryGreek greekData key =
             Nothing -> Nothing
             Just first -> divMay (fromIntegral mx) (fromIntegral first)
 
+-- 4. Generalizing chains of failures
+chain :: (a -> Maybe b) -> Maybe a -> Maybe b
+chain f Nothing = Nothing
+chain f (Just a) = f a
+
+link :: Maybe a -> (a -> Maybe b) -> Maybe b
+link Nothing f = Nothing
+link (Just a) f = f a
+
+queryGreek2 :: GreekData -> String -> Maybe Double
+queryGreek2 greekData key =
+  let
+    xsMaybe = lookupMay key greekData
+    ysMaybe = link xsMaybe tailMay
+    mxMaybe = link ysMaybe maximumMay
+    firstMaybe = link xsMaybe headMay
+  in
+    link firstMaybe (\first ->
+      link mxMaybe (\mx ->
+        divMay (fromIntegral mx) (fromIntegral first)))
+        

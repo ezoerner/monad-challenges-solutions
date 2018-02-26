@@ -48,3 +48,17 @@ queryGreek greekDataB "phi" == Just 0.24528301886792453
 queryGreek greekDataB "chi" == Just 9.095238095238095
 queryGreek greekDataB "psi" == Nothing
 queryGreek greekDataB "omega" == Just 24.0
+
+queryGreek2 greekDataA "beta"
+
+queryGreek2 greekDataA "alpha" == Just 2.0
+queryGreek2 greekDataA "beta" == Nothing
+queryGreek2 greekDataA "gamma" == Just 3.3333333333333335
+queryGreek2 greekDataA "delta" == Nothing
+queryGreek2 greekDataA "zeta" == Nothing
+
+queryGreek2 greekDataB "rho" == Nothing
+queryGreek2 greekDataB "phi" == Just 0.24528301886792453
+queryGreek2 greekDataB "chi" == Just 9.095238095238095
+queryGreek2 greekDataB "psi" == Nothing
+queryGreek2 greekDataB "omega" == Just 24.0
