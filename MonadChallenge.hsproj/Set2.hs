@@ -69,22 +69,52 @@ queryGreek greekData key =
 
 -- 4. Generalizing chains of failures
 chain :: (a -> Maybe b) -> Maybe a -> Maybe b
-chain f Nothing = Nothing
-chain f (Just a) = f a
+chain = flip link
 
 link :: Maybe a -> (a -> Maybe b) -> Maybe b
 link Nothing f = Nothing
 link (Just a) f = f a
 
+-- I have an idea, let's just call link (>>=) and use infix notation
+(>>=) = link
+
 queryGreek2 :: GreekData -> String -> Maybe Double
 queryGreek2 greekData key =
   let
     xsMaybe = lookupMay key greekData
-    ysMaybe = link xsMaybe tailMay
-    mxMaybe = link ysMaybe maximumMay
-    firstMaybe = link xsMaybe headMay
+    ysMaybe = xsMaybe >>= tailMay
+    mxMaybe = ysMaybe >>= maximumMay
+    firstMaybe = xsMaybe >>= headMay
   in
-    link firstMaybe (\first ->
-      link mxMaybe (\mx ->
+    firstMaybe >>= (\first ->
+      mxMaybe >>= (\mx ->
         divMay (fromIntegral mx) (fromIntegral first)))
+        
+-- 5. Chaining variations
+addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries salaries name1 name2 =
+  let
+    maybeS1 = lookupMay name1 salaries
+    maybeS2 = lookupMay name2 salaries
+  in
+    maybeS1 >>= \s1 ->
+    maybeS2 >>= \s2 ->
+      mkMaybe $ s1 + s2
+      
+yLink :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
+yLink f maybeA maybeB =
+  maybeA >>= \a ->
+  maybeB >>= \b ->
+    mkMaybe $ f a b
+    
+addSalaries2 :: [(String, Integer)] -> String -> String -> Maybe Integer
+addSalaries2 salaries name1 name2 =
+  let
+    maybeS1 = lookupMay name1 salaries
+    maybeS2 = lookupMay name2 salaries
+  in
+    yLink (+) maybeS1 maybeS2
+    
+mkMaybe :: a -> Maybe a
+mkMaybe = Just
         

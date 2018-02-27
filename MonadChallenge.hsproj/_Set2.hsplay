@@ -62,3 +62,14 @@ queryGreek2 greekDataB "phi" == Just 0.24528301886792453
 queryGreek2 greekDataB "chi" == Just 9.095238095238095
 queryGreek2 greekDataB "psi" == Nothing
 queryGreek2 greekDataB "omega" == Just 24.0
+
+salaries :: [(String, Integer)]
+salaries = [ ("alice", 105000)
+           , ("bob", 90000)
+           , ("carol", 85000)
+           ]
+addSalaries salaries "alice" "carol"
+addSalaries salaries "bob" "john"
+addSalaries2 salaries "alice" "carol"
+addSalaries2 salaries "bob" "john"
+
