@@ -5,10 +5,8 @@ module Set2 where
   
 import MCPrelude
 
--- To display values in Haskell for Mac playground,
--- comment out the RebindableSyntax pragma and use these imports instead:
---import MCPrelude (GreekData, greekDataA, greekDataB, ifThenElse)
---import Prelude hiding (Maybe, Just, Nothing)
+-- required for Haskell for Mac to display values in playground
+import Prelude (($!)) 
 
 -- 1. The Maybe Type
 

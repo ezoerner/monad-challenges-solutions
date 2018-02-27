@@ -5,9 +5,8 @@ module Set1 where
   
 import MCPrelude
 
--- To display values in Haskell for Mac playground,
--- comment out the RebindableSyntax pragma and use these imports instead:
---import MCPrelude (Seed, rand, mkSeed, toLetter)
+-- required for Haskell for Mac to display values in playground
+import Prelude (($!)) 
 
 -- 1. Random Number Generation
 fiveRands :: [Integer]
