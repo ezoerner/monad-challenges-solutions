@@ -73,3 +73,4 @@ addSalaries salaries "bob" "john"
 addSalaries2 salaries "alice" "carol"
 addSalaries2 salaries "bob" "john"
 
+yLink (+) (Just 1) (Just 5)

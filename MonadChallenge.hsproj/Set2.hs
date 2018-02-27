@@ -8,7 +8,9 @@ import MCPrelude
 -- required for Haskell for Mac to display values in playground
 import Prelude (($!)) 
 
+-----------------------------------------------
 -- 1. The Maybe Type
+-----------------------------------------------
 
 data Maybe a = Just a | Nothing
   deriving (Eq, Show) 
@@ -21,7 +23,9 @@ instance Show a => Show (Maybe a) where
   show Nothing = "Nothing"
 --}
 
+-----------------------------------------------
 -- 2. Build a library of things that can fail
+-----------------------------------------------
 
 headMay :: [a] -> Maybe a
 headMay [] = Nothing
@@ -67,7 +71,10 @@ queryGreek greekData key =
             Nothing -> Nothing
             Just first -> divMay (fromIntegral mx) (fromIntegral first)
 
+-----------------------------------------------
 -- 4. Generalizing chains of failures
+-----------------------------------------------
+
 chain :: (a -> Maybe b) -> Maybe a -> Maybe b
 chain = flip link
 
@@ -75,7 +82,7 @@ link :: Maybe a -> (a -> Maybe b) -> Maybe b
 link Nothing f = Nothing
 link (Just a) f = f a
 
--- I have an idea, let's just call link (>>=) and use infix notation
+-- I have an idea, let's just call link ">>=" and use infix notation
 (>>=) = link
 
 queryGreek2 :: GreekData -> String -> Maybe Double
@@ -90,7 +97,9 @@ queryGreek2 greekData key =
       mxMaybe >>= (\mx ->
         divMay (fromIntegral mx) (fromIntegral first)))
         
+-----------------------------------------------
 -- 5. Chaining variations
+-----------------------------------------------
 addSalaries :: [(String, Integer)] -> String -> String -> Maybe Integer
 addSalaries salaries name1 name2 =
   let
@@ -101,6 +110,7 @@ addSalaries salaries name1 name2 =
     maybeS2 >>= \s2 ->
       mkMaybe $ s1 + s2
       
+-- in Control.Monad this is known as "liftM2"
 yLink :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
 yLink f maybeA maybeB =
   maybeA >>= \a ->
