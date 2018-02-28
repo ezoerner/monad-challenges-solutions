@@ -8,13 +8,17 @@ import MCPrelude
 -- required for Haskell for Mac to display values in playground
 import Prelude (($!)) 
 
+-----------------------------------------------
 -- 1. Random Number Generation
+-----------------------------------------------
 fiveRands :: [Integer]
 fiveRands = take 5 $ drop 1 $ map fst $ iterate (\(_, seed) -> rand seed) (0, mkSeed 1)
     
 type Gen a = Seed -> (a, Seed)
 
+-----------------------------------------------
 -- 2 Random Character Generation
+-----------------------------------------------
 randLetter :: Gen Char
 randLetter = \seed -> case rand seed of
   (n , seed) -> (toLetter n, seed)
@@ -23,7 +27,9 @@ randString3 :: String
 randString3 = take 3 $ drop 1 $ map fst  $
   iterate (\(_, seed) -> randLetter seed) ('0', mkSeed 1)
 
+-----------------------------------------------
 -- 3. More Generators
+-----------------------------------------------
 randEven :: Gen Integer -- the output of rand * 2
 randEven = generalA (* 2) rand
 
@@ -37,7 +43,9 @@ generalA :: (a -> b) -> Gen a -> Gen b
 generalA a2b genA = \seed -> case genA seed of
   (a, sd) -> (a2b a, sd)
 
+-----------------------------------------------
 -- 4. Generalizing Random Pairs
+-----------------------------------------------
 randPair :: Gen (Char, Integer)
 randPair = \seed ->
   let
@@ -66,7 +74,9 @@ generalB ab2c genA genB = \seed ->
 generalPair2:: Gen a -> Gen b -> Gen (a,b)
 generalPair2 = generalB (,)
 
+-----------------------------------------------
 -- 5. Generalizing Lists of Generators
+-----------------------------------------------
 repRandom :: [Gen a] -> Gen [a]
 --repRandom :: [Seed -> (a, Seed)] -> (Seed -> ([a], Seed))
 repRandom genAs = \seed0 ->
@@ -76,8 +86,10 @@ repRandom genAs = \seed0 ->
   in
     case foldl f ([], seed0) genAs of
       (as, resultSeed) -> (reverse as, resultSeed)
-       
+      
+-----------------------------------------------    
 -- 6. Threading the random number state
+-----------------------------------------------
 genTwo :: Gen a -> (a -> Gen b) -> Gen b
 genTwo genA k = \seed -> case genA seed of
   (a, sd) -> k a sd

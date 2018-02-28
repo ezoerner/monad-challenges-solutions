@@ -58,7 +58,9 @@ minimumMay (a : as) = case minimumMay as of
    Just m -> Just $ a `min` m
    Nothing -> Just a
    
+-----------------------------------------------
 -- 3. Chains of Failing Computations
+-----------------------------------------------
 queryGreek :: GreekData -> String -> Maybe Double
 queryGreek greekData key =
   case lookupMay key greekData of
@@ -128,3 +130,27 @@ addSalaries2 salaries name1 name2 =
 mkMaybe :: a -> Maybe a
 mkMaybe = Just
         
+-----------------------------------------------
+-- 6. Tailprod
+-----------------------------------------------
+tailProd :: Num a => [a] -> Maybe a
+--tailProd xs = tailMay xs >>= \as -> Just $ product as
+tailProd = transMaybe product . tailMay
+
+  
+tailSum :: Num a => [a] -> Maybe a
+--tailSum xs = tailMay xs >>= \as -> Just $ sum as
+tailSum = transMaybe sum . tailMay
+  
+transMaybe :: (a -> b) -> Maybe a -> Maybe b
+transMaybe f maybeA = maybeA >>= \a -> mkMaybe $ f a
+
+--tailMax :: Ord a => [a] -> Maybe (Maybe a)
+tailMax :: Ord a => [a] -> Maybe a
+tailMax = combine . transMaybe maximumMay . tailMay
+
+tailMin :: Ord a => [a] -> Maybe a
+tailMin = combine . transMaybe minimumMay . tailMay
+
+combine :: Maybe (Maybe a) -> Maybe a
+combine mma = mma >>= id
