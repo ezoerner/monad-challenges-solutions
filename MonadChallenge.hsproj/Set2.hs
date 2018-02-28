@@ -112,7 +112,7 @@ addSalaries salaries name1 name2 =
     maybeS2 >>= \s2 ->
       mkMaybe $ s1 + s2
       
--- in Control.Monad this is known as "liftM2"
+-- in other words, "liftM2"
 yLink :: (a -> b -> c) -> Maybe a -> Maybe b -> Maybe c
 yLink f maybeA maybeB =
   maybeA >>= \a ->
@@ -142,6 +142,7 @@ tailSum :: Num a => [a] -> Maybe a
 --tailSum xs = tailMay xs >>= \as -> Just $ sum as
 tailSum = transMaybe sum . tailMay
   
+-- in other words, "fmap"
 transMaybe :: (a -> b) -> Maybe a -> Maybe b
 transMaybe f maybeA = maybeA >>= \a -> mkMaybe $ f a
 
@@ -152,5 +153,6 @@ tailMax = combine . transMaybe maximumMay . tailMay
 tailMin :: Ord a => [a] -> Maybe a
 tailMin = combine . transMaybe minimumMay . tailMay
 
+-- in other words, "join"
 combine :: Maybe (Maybe a) -> Maybe a
 combine mma = mma >>= id
