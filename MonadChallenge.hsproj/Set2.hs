@@ -127,6 +127,7 @@ addSalaries2 salaries name1 name2 =
   in
     yLink (+) maybeS1 maybeS2
     
+-- In other words, "return" or "pure"
 mkMaybe :: a -> Maybe a
 mkMaybe = Just
         
