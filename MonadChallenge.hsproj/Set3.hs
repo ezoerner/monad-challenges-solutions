@@ -47,10 +47,10 @@ allCombs1 f as bs =
 
 
 allPairs :: [a] -> [b] -> [(a,b)]
-allPairs = allCombs1 (,)
+allPairs = allCombs (,)
 
 allCards :: [Int] -> [String] -> [Card]
-allCards = allCombs1 Card
+allCards = allCombs Card
 
 -- 4. Combinations of three things
 allCombs34 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
@@ -75,12 +75,11 @@ combStep fs as =
       
 allCombs :: (a -> b -> c) -> [a] -> [b] -> [c]
 allCombs f as bs =
-  let
-    next [] _ = []
-    next (_ : xs) [] = next xs bs
-    next xs@(x : _) (y : ys) = f x y : next xs ys
-  in
-    next as bs
+  combStep (combStep [f] as) bs
+  
+allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+allCombs3 f as bs cs =
+  combStep (combStep (combStep [f] as) bs) cs
   
 
 
