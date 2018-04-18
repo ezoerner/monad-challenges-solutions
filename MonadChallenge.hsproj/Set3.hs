@@ -73,13 +73,33 @@ combStep fs as =
   in
     next fs as
       
-allCombs :: (a -> b -> c) -> [a] -> [b] -> [c]
-allCombs f as bs =
+allCombs5 :: (a -> b -> c) -> [a] -> [b] -> [c]
+allCombs5 f as bs =
   combStep (combStep [f] as) bs
   
-allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
-allCombs3 f as bs cs =
+allCombs35 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+allCombs35 f as bs cs =
   combStep (combStep (combStep [f] as) bs) cs
   
+-- hey, what if we use infix and call "combStep" <*> ?
+(<*>) :: [a -> b] -> [a] -> [b]
+(<*>) fs as =
+  let
+    next [] _ = []
+    next (_ : fs) [] = next fs as
+    next fs@(f : _) (y : ys) = f y : next fs ys
+  in
+    next fs as
+      
+allCombs :: (a -> b -> c) -> [a] -> [b] -> [c]
+allCombs f as bs = [f] <*> as <*> bs
+  
+allCombs3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+allCombs3 f as bs cs = [f] <*> as <*> bs <*> cs
+
+-- the first step could be just fmap and called <$>
+-- f <$> as <*> bs <*> cs
+
+
 
 
